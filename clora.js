@@ -5,8 +5,6 @@
  */
 Clora = function(program) {
 
-    console.log(typeof program);
-    console.log(program);
     if (program === undefined || typeof program !== 'string') {
         throw 'Invalid clora program';
     }
@@ -30,6 +28,9 @@ Clora = function(program) {
             }
             throw 'Undeclared variable ' + p1;
         }
+        if (opcode === 'T'){ //Translate
+            return p1[I];
+        }
         if (opcode === '=') { // EQUALS
             var v1 = this.evaluate(P, I, N, 'R', p1);
             var v2 = this.evaluate(P, I, N, 'R', p2);
@@ -50,17 +51,68 @@ Clora = function(program) {
 
     this.run = function(P, I, N, program) {
         var trueFlag = false;
+        var numericMode = false;
         var result = '';
 
+        // Quick check for NEXT variable use
+        var skip = false;
         for (var i = 0, l = program.length; i < l; i++) {
-            if ((program[i] == '=' || program[i] == '<' || program[i] == '>') && i + 2 < l) {
-                if (this.useNext(program, i) && N === undefined) {
-                    break;
+            if(program[i] === 'N' && !skip){
+                if(N === undefined){
+                    return undefined;
                 }
+            }
+            if(program[i] === '['){
+                skip = true;
+            }
+            if(program[i] === ']'){
+                skip = false;
+            }
+        }
+        
+
+        for (var i = 0, l = program.length; i < l; i++) {
+            console.log("PIN="+P+'/'+I+'/'+N +" CODE="+program.substr(i));
+            if(program[i] === '@'){ // Numeric mode
+                numericMode = !numericMode;
+                i++;
+            }
+            if(program[i] === '!'){// Result Input
+                result = I;
+            }
+            if(program[i] === 'T'){ // Translate
+                var array = [];
+                if(program[i+1] !== '[' ){
+                    throw 'You cant translate without an array';
+                }
+                var buff = '';
+                for(var c=i+2; c<l; c++){
+                    if(program[c] == ','){
+                        if(numericMode){
+                            array.push(Number.parseInt(buff));
+                        }else{
+                            array.push(buff);
+                        }
+                        buff = '';
+                    }else if(program[c] === ']'){
+                        break;
+                    }else{
+                        buff = buff + program[c];
+                    }
+                    i=c;
+                }
+                if(numericMode){
+                    array.push(Number.parseInt(buff));
+                }else{
+                    array.push(buff);
+                }
+                I=this.evaluate(P,I,N,'T',array);
+            }
+            if ((program[i] == '=' || program[i] == '<' || program[i] == '>') && i + 2 < l) { // Comparators
                 trueFlag = this.evaluate(P, I, N, program[i], program[i + 1], program[i + 2]);
                 i = i + 3;
             }
-            if (program[i] == '?' && i + 2 < l) {
+            if (program[i] == '?' && i + 2 < l) { // If
                 if (trueFlag) {
                     result += program[i + 1];
                 } else {
@@ -82,6 +134,12 @@ Clora = function(program) {
         var P = undefined;
         var result = '';
 
+        if(program[0] === '@'){ // Numeric mode
+            input = input.split(' ').map(function(n){
+                return Number.parseInt(n);
+            });
+        }
+
         for (var inputIterator = 0, inputLength = input.length; inputIterator < inputLength; inputIterator++) {
             var I = input[inputIterator];
             var N = undefined;
@@ -101,3 +159,8 @@ Clora = function(program) {
     }
 
 };
+
+x = new Clora('@T[0,7,2,10,5,0,7]+N%12@T[A,A#,B,C#,D,D#,E,F,F#,G,G#]!');
+x.execute("4 13", function(r){
+    console.log(r);
+});
