@@ -5,6 +5,8 @@
  */
 Clora = function(program) {
 
+    console.log(typeof program);
+    console.log(program);
     if (program === undefined || typeof program !== 'string') {
         throw 'Invalid clora program';
     }
@@ -29,18 +31,18 @@ Clora = function(program) {
             throw 'Undeclared variable ' + p1;
         }
         if (opcode === '=') { // EQUALS
-            var v1 = evaluate(P, I, N, 'R', p1);
-            var v2 = evaluate(P, I, N, 'R', p2);
+            var v1 = this.evaluate(P, I, N, 'R', p1);
+            var v2 = this.evaluate(P, I, N, 'R', p2);
             return v1 == v2;
         }
         if (opcode === '<') { // SMALLER
-            var v1 = evaluate(P, I, N, 'R', p1);
-            var v2 = evaluate(P, I, N, 'R', p2);
+            var v1 = this.evaluate(P, I, N, 'R', p1);
+            var v2 = this.evaluate(P, I, N, 'R', p2);
             return v1 < v2;
         }
         if (opcode === '>') { // BIGGER
-            var v1 = evaluate(P, I, N, 'R', p1);
-            var v2 = evaluate(P, I, N, 'R', p2);
+            var v1 = this.evaluate(P, I, N, 'R', p1);
+            var v2 = this.evaluate(P, I, N, 'R', p2);
             return v1 > v2;
         }
 
@@ -52,10 +54,10 @@ Clora = function(program) {
 
         for (var i = 0, l = program.length; i < l; i++) {
             if ((program[i] == '=' || program[i] == '<' || program[i] == '>') && i + 2 < l) {
-                if (useNext(program, i) && N === undefined) {
+                if (this.useNext(program, i) && N === undefined) {
                     break;
                 }
-                trueFlag = evaluate(P, I, N, program[i], program[i + 1], program[i + 2]);
+                trueFlag = this.evaluate(P, I, N, program[i], program[i + 1], program[i + 2]);
                 i = i + 3;
             }
             if (program[i] == '?' && i + 2 < l) {
@@ -86,7 +88,7 @@ Clora = function(program) {
             if (inputIterator + 1 < inputLength) {
                 N = input[inputIterator + 1];
             }
-            result += run(P, I, N, program);
+            result += this.run(P, I, N, program);
             P = I;
         }
         return result;
@@ -94,8 +96,8 @@ Clora = function(program) {
 
     this.execute = function(input, callback) {
         for (var i = 0, l = this.programs.length; i < l; i++) {
-            callback && callback(executeProgram(programs[i], input));
+            callback && callback(this.executeProgram(this.programs[i], input));
         }
     }
 
-}
+};
