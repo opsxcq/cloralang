@@ -26,7 +26,7 @@ Clora = function(program) {
             if (p1 === 'N') {
                 return N;
             }
-            throw 'Undeclared variable ' + p1;
+            return p1;
         }
         if (opcode === 'T'){ //Translate
             return p1[I];
@@ -69,10 +69,10 @@ Clora = function(program) {
                 skip = false;
             }
         }
-        
 
+        debugger;
         for (var i = 0, l = program.length; i < l; i++) {
-            //console.log("PIN="+P+'/'+I+'/'+N +" CODE="+program.substr(i));
+            console.log("PIN="+P+'/'+I+'/'+N +" CODE="+program.substr(i));
             if(program[i] === '@'){ // Numeric mode
                 numericMode = !numericMode;
                 i++;
@@ -181,3 +181,9 @@ Clora = function(program) {
 
 };
 
+
+x = new Clora('<0I?01');
+x.execute('10101110101010010100010001010110101001010', function(r){
+    console.log("EXPECTED=10101110101010010100010001010110101001010");
+    console.log("RESULTED="+r);
+});

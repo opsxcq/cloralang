@@ -1,4 +1,4 @@
-# cloralang
+# Clora Programming Language 
 
 Clora Programming Language for Code Golfing
 
@@ -41,6 +41,11 @@ Currently clora only use comparation instructions to determine it's code flow, t
 * ```>```  test if parameter 1 is bigger than parameter 2 ```>IN```, will set the global flag to true, if current input character is bigger than the next character, if it exists
 * ```<```  test if parameter 1 is smaller than parameter 2, example ```<IN```, will set the global flag to true, if current input character is smaller than the next character, if it exists
 * ```?``` if global flag is set, output parameter 1, else, output parameter 2
+* ```T``` Transform the Input value into an value from an array defined by [elements]
+* ```+``` Add to Input value
+* ```%``` Apply modulus to the input value
+* ```!``` Use Input value as Output
+* ```@``` Parse input as a list of numbers
 
 ## Multiprograms
 
