@@ -72,13 +72,28 @@ Clora = function(program) {
         
 
         for (var i = 0, l = program.length; i < l; i++) {
-            console.log("PIN="+P+'/'+I+'/'+N +" CODE="+program.substr(i));
+            //console.log("PIN="+P+'/'+I+'/'+N +" CODE="+program.substr(i));
             if(program[i] === '@'){ // Numeric mode
                 numericMode = !numericMode;
                 i++;
             }
             if(program[i] === '!'){// Result Input
                 result = I;
+                i++;
+            }
+            if(program[i] === '+'){ // ADD
+                if(program[i+1] === 'N'){
+                    I = I + N;
+                }else{
+                    I = I + Number.parseInt(program.substr(i+1));
+                }
+            }
+            if(program[i] === '%'){ // Modulus
+                if(program[i+1] === 'N'){
+                    I = I % N;
+                }else{
+                    I = I % Number.parseInt(program.substr(i+1));
+                }
             }
             if(program[i] === 'T'){ // Translate
                 var array = [];
@@ -146,7 +161,10 @@ Clora = function(program) {
             if (inputIterator + 1 < inputLength) {
                 N = input[inputIterator + 1];
             }
-            result += this.run(P, I, N, program);
+            var ret = this.run(P, I, N, program);
+            if(ret !== undefined){
+                result += ret;
+            }
             P = I;
         }
         return result;
@@ -154,13 +172,12 @@ Clora = function(program) {
 
     this.execute = function(input, callback) {
         for (var i = 0, l = this.programs.length; i < l; i++) {
-            callback && callback(this.executeProgram(this.programs[i], input));
+            var result = this.executeProgram(this.programs[i], input);
+            if(result !== undefined){
+                callback && callback(result);
+            }
         }
     }
 
 };
 
-x = new Clora('@T[0,7,2,10,5,0,7]+N%12@T[A,A#,B,C#,D,D#,E,F,F#,G,G#]!');
-x.execute("4 13", function(r){
-    console.log(r);
-});
