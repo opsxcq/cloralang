@@ -6,6 +6,20 @@ Clora Programming Language for Code Golfing
 
 Clora is a code golf, in development language, its virtual machine run in javascript, so it browser and node compatible.
 
+## Usage
+
+Just include the clora.js file on your appliation and:
+
+```
+
+ clora = new Clora('=IN?a '); // Create a clora instance of a program
+ clora.execute('AA', function(result){
+    console.log(result);    
+ }); // Executes the clora program for AA input, and give a callback for its result
+
+
+```
+
 ## How to code
 
 Clora is a simple ```instruction:arguments``` based language, with global flags registers and global variables
