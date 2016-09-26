@@ -4,7 +4,7 @@ Clora Programming Language for Code Golfing
 
 ## About Clora
 
-Clora is a code golf, in development language, it's virtual machine run in javascript, so it browser and node compatible.
+Clora is a code golf, in development language, its virtual machine run in javascript, so it browser and node compatible.
 
 ## How to code
 
@@ -24,8 +24,8 @@ The list of global variables:
 Currently clora only use comparation instructions to determine it's code flow, those instructions
 
 * ```=``` equality test, test if parameters 1 and 2 are equals, example ```=IN```, will set the global flag to true, if current input character is equals to the next character, if it exists
-* ```>``` equality test, test if parameter 1 is bigger than parameter 2 ```>IN```, will set the global flag to true, if current input character is bigger than the next character, if it exists
-* ```<``` equality test, test if parameter 1 is smaller than parameter 2, example ```<IN```, will set the global flag to true, if current input character is smaller than the next character, if it exists
+* ```>```  test if parameter 1 is bigger than parameter 2 ```>IN```, will set the global flag to true, if current input character is bigger than the next character, if it exists
+* ```<```  test if parameter 1 is smaller than parameter 2, example ```<IN```, will set the global flag to true, if current input character is smaller than the next character, if it exists
 * ```?``` if global flag is set, output parameter 1, else, output parameter 2
 
 ## Multiprograms
